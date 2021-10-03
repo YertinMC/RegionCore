@@ -113,11 +113,6 @@ public class RegionCore extends JavaPlugin {
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        public void onBlockMoved(BlockFromToEvent event) {
-            onBlockRemove(event);
-        }
-
-        @EventHandler(priority = EventPriority.HIGHEST)
         public void onEntityChangeBlock(EntityChangeBlockEvent event) {
             onBlockRemove(event.getBlock());
         }

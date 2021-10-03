@@ -256,7 +256,7 @@ public class WorldRegionDataManager<W> {
             int worldChunkPosX = x / chunkWidth;
             int worldChunkPosZ = z / chunkWidth;
             int regionChunkPosX = worldChunkPosX % regionSize;
-            int regionChunkPosZ = worldChunkPosX % regionSize;
+            int regionChunkPosZ = worldChunkPosZ % regionSize;
             int chunkOffsetX = x % chunkWidth;
             int chunkOffsetZ = z % chunkWidth;
             @Nullable Object chunkData = data == null ? region.getData().getChunkData(regionChunkPosX, regionChunkPosZ) :
