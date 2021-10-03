@@ -27,6 +27,11 @@ allprojects {
     task sourcesJar(type: Jar) {
         classifier 'sources'
         from sourceSets.main.allSource
+        from rootProject.file('LICENSE')
+    }
+
+    afterEvaluate {
+        tasks.build.dependsOn tasks.sourcesJar
     }
 
 }
@@ -37,7 +42,6 @@ dependencies {
 }
 
 tasks.build.dependsOn tasks.javadocJar
-tasks.build.dependsOn tasks.sourcesJar
 
 javadoc {
     options {

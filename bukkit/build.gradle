@@ -19,7 +19,6 @@ dependencies {
 }
 
 tasks.build.dependsOn tasks.shadowJar
-tasks.build.dependsOn tasks.sourcesJar
 
 processResources {
     filesMatching('plugin.yml') {
@@ -35,4 +34,9 @@ publishing {
             artifact sourcesJar
         }
     }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
