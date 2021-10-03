@@ -44,7 +44,13 @@ public class RegionCore extends JavaPlugin {
         saveDefaultConfig();
         Bukkit.getPluginManager().registerEvents(new EventListener(), this);
         int time = getConfig().getInt("trivial_auto_save_period", 60000);
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new RegionCoreTrivialAutoSaver(), time, time);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, TRIVIAL::write, time, time);
+    }
+
+    @Override
+    public void onDisable() {
+        super.onDisable();
+        TRIVIAL.write();
     }
 
     public static class EventListener implements Listener {
