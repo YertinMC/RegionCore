@@ -4,18 +4,25 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.*;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.yertinmc.regioncore.RegionDataDefinition;
 import top.yertinmc.regioncore.RegionDataManager;
 
 import java.io.File;
+import java.util.List;
 
 @SuppressWarnings("unused")
 public class RegionCore extends JavaPlugin {
@@ -53,16 +60,76 @@ public class RegionCore extends JavaPlugin {
         TRIVIAL.write();
     }
 
+    public static void onBlockRemove(BlockEvent event) {
+        onBlockRemove(event.getBlock());
+    }
+
+    public static void onBlockRemove(Block block) {
+        TRIVIAL.remove(block.getWorld(), block.getX(), block.getY(), block.getZ());
+    }
+
+    public static void onBlockMove(World world, Location oldLocation, Location newLocation) {
+        TRIVIAL.move(world, oldLocation.getBlockX(), oldLocation.getBlockY(), oldLocation.getBlockZ(),
+                newLocation.getBlockX(), newLocation.getBlockY(), newLocation.getBlockZ());
+    }
+
+    public static void onBlockPiston(BlockPistonEvent event, List<Block> blocks) {
+        Vector offsetToNewBlock = event.getDirection().getDirection().multiply(-1);
+        for (Block block : blocks) {
+            onBlockMove(block.getWorld(), block.getLocation(), block.getLocation().add(offsetToNewBlock));
+        }
+    }
+
     public static class EventListener implements Listener {
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         public void onChunkLoad(ChunkLoadEvent event) {
             TRIVIAL.loadChunk(event.getWorld(), event.getChunk().getX(), event.getChunk().getZ());
         }
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         public void onChunkUnload(ChunkUnloadEvent event) {
             TRIVIAL.unloadChunk(event.getWorld(), event.getChunk().getX(), event.getChunk().getZ());
+        }
+
+        @EventHandler(priority = EventPriority.HIGHEST)
+        public void onBlockBreak(BlockBreakEvent event) {
+            onBlockRemove(event);
+        }
+
+        @EventHandler(priority = EventPriority.HIGHEST)
+        public void onBlockBurn(BlockBurnEvent event) {
+            onBlockRemove(event);
+        }
+
+        @EventHandler(priority = EventPriority.HIGHEST)
+        public void onBlockExplode(BlockExplodeEvent event) {
+            onBlockRemove(event);
+        }
+
+        @EventHandler(priority = EventPriority.HIGHEST)
+        public void onBlockFade(BlockFadeEvent event) {
+            onBlockRemove(event);
+        }
+
+        @EventHandler(priority = EventPriority.HIGHEST)
+        public void onBlockMoved(BlockFromToEvent event) {
+            onBlockRemove(event);
+        }
+
+        @EventHandler(priority = EventPriority.HIGHEST)
+        public void onEntityChangedBlock(EntityChangeBlockEvent event) {
+            onBlockRemove(event.getBlock());
+        }
+
+        @EventHandler(priority = EventPriority.HIGHEST)
+        public void onPistonExtend(BlockPistonExtendEvent event) {
+            onBlockPiston(event, event.getBlocks());
+        }
+
+        @EventHandler(priority = EventPriority.HIGHEST)
+        public void onPistonRetract(BlockPistonRetractEvent event) {
+            onBlockPiston(event, event.getBlocks());
         }
 
     }

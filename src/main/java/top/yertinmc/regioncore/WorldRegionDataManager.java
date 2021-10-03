@@ -1,5 +1,6 @@
 package top.yertinmc.regioncore;
 
+import org.jetbrains.annotations.Nullable;
 import top.yertinmc.regioncore.io.ChunkData;
 import top.yertinmc.regioncore.io.LayerData;
 
@@ -259,9 +260,14 @@ public class WorldRegionDataManager<W> {
             int chunkPosZ = regionOffsetZ / chunkWidth;
             int chunkOffsetX = regionOffsetX % chunkWidth;
             int chunkOffsetZ = regionOffsetZ % chunkWidth;
-            ChunkData chunk = region.getData().getOrInitChunkData(chunkPosX, chunkPosZ);
-            LayerData layer = chunk.getOrInitLayer(y);
-            layer.setBlock(chunkOffsetX, chunkOffsetZ, data);
+            @Nullable Object chunkData = data == null ? region.getData().getChunkData(chunkPosX, chunkPosZ) :
+                    region.getData().getOrInitChunkData(chunkPosX, chunkPosZ);
+            if (chunkData instanceof ChunkData) {
+                ChunkData chunk = (ChunkData) chunkData;
+                @Nullable LayerData layer = data == null ? chunk.getLayer(y) : chunk.getOrInitLayer(y);
+                if (layer != null)
+                    layer.setBlock(chunkOffsetX, chunkOffsetZ, data);
+            }
         }
     }
 

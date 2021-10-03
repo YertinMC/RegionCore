@@ -85,7 +85,7 @@ public class RegionDataManager<W> {
      * @param x     The X position of the block
      * @param y     The Y position of the block
      * @param z     The Z position of the block
-     * @return The data of the block if created and not empty
+     * @return The data of the block if created and not empty, else null
      */
     public Object get(W world, int x, int y, int z) {
         return getManager(world).get(x, y, z);
@@ -102,6 +102,52 @@ public class RegionDataManager<W> {
      */
     public void set(W world, int x, int y, int z, Object data) {
         getManager(world).set(x, y, z, data);
+    }
+
+    /**
+     * Remove the data of a block.
+     *
+     * @param world The world
+     * @param x     The X position of the block
+     * @param y     The Y position of the block
+     * @param z     The Z position of the block
+     */
+    public void remove(W world, int x, int y, int z) {
+        set(world, x, y, z, null);
+    }
+
+    /**
+     * Move the data of a block to another block.
+     * The data of the origin block will be remove.
+     *
+     * @param world The world
+     * @param x1    The X position of the origin block
+     * @param y1    The Y position of the origin block
+     * @param z1    The Z position of the origin block
+     * @param x2    The X position of the new block
+     * @param y2    The Y position of the new block
+     * @param z2    The Z position of the new block
+     */
+    public void move(W world, int x1, int y1, int z1, int x2, int y2, int z2) {
+        move(world, x1, y1, z1, world, x2, y2, z2);
+    }
+
+    /**
+     * Move the data of a block to another block.
+     * The data of the origin block will be remove.
+     *
+     * @param world1 The world with the origin block
+     * @param x1     The X position of the origin block
+     * @param y1     The Y position of the origin block
+     * @param z1     The Z position of the origin block
+     * @param world2 The world with the new block
+     * @param x2     The X position of the new block
+     * @param y2     The Y position of the new block
+     * @param z2     The Z position of the new block
+     */
+    public void move(W world1, int x1, int y1, int z1, W world2, int x2, int y2, int z2) {
+        set(world2, x2, y2, z2, get(world2, x1, y1, z1));
+        remove(world1, x1, y1, z1);
     }
 
     /**
