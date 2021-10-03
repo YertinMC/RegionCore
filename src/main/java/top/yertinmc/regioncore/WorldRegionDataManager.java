@@ -253,20 +253,21 @@ public class WorldRegionDataManager<W> {
                     z / chunkWidth / regionSize);
             if (region == null) // Check region loaded
                 throw new IllegalStateException("Region not loaded for block pos " + x + ", " + y + ", " + z + " but trying to set.");
-            region.markDirty(); // Mark dirty
-            int regionOffsetX = x % regionSize;
-            int regionOffsetZ = z % regionSize;
-            int chunkPosX = regionOffsetX / chunkWidth;
-            int chunkPosZ = regionOffsetZ / chunkWidth;
-            int chunkOffsetX = regionOffsetX % chunkWidth;
-            int chunkOffsetZ = regionOffsetZ % chunkWidth;
-            @Nullable Object chunkData = data == null ? region.getData().getChunkData(chunkPosX, chunkPosZ) :
-                    region.getData().getOrInitChunkData(chunkPosX, chunkPosZ);
+            int worldChunkPosX = x / chunkWidth;
+            int worldChunkPosZ = z / chunkWidth;
+            int regionChunkPosX = worldChunkPosX % regionSize;
+            int regionChunkPosZ = worldChunkPosX % regionSize;
+            int chunkOffsetX = x % chunkWidth;
+            int chunkOffsetZ = z % chunkWidth;
+            @Nullable Object chunkData = data == null ? region.getData().getChunkData(regionChunkPosX, regionChunkPosZ) :
+                    region.getData().getOrInitChunkData(regionChunkPosX, regionChunkPosZ);
             if (chunkData instanceof ChunkData) {
                 ChunkData chunk = (ChunkData) chunkData;
                 @Nullable LayerData layer = data == null ? chunk.getLayer(y) : chunk.getOrInitLayer(y);
-                if (layer != null)
+                if (layer != null) {
                     layer.setBlock(chunkOffsetX, chunkOffsetZ, data);
+                    region.markDirty();
+                }
             }
         }
     }
