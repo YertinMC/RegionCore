@@ -32,7 +32,7 @@ public class LoadedRegionData<W> {
             try (DataInputStream is = new DataInputStream(new FileInputStream(file))) {
                 this.data = RegionData.read(manager, is);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Error reading exixts region from " + file, e);
             }
         } else {
             data = new RegionData(manager);

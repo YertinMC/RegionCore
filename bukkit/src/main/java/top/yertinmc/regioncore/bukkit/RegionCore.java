@@ -20,7 +20,7 @@ import java.io.File;
 @SuppressWarnings("unused")
 public class RegionCore extends JavaPlugin {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger("BlockPlant/RegionData");
+    public static final Logger LOGGER_TRIVIAL = LoggerFactory.getLogger("RegionData/Trivial");
     public static final Gson GSON = new GsonBuilder().create();
     @SuppressWarnings({"Convert2MethodRef", "SpellCheckingInspection"})
     public static final RegionDataManager<World> TRIVIAL = new RegionDataManager<World>(new RegionDataDefinition.Builder<World>()
@@ -32,12 +32,19 @@ public class RegionCore extends JavaPlugin {
             .dataSerializer((data) -> GSON.toJson(data).getBytes())
             .dataDeserializer((data) -> GSON.fromJson(new String(data), JsonObject.class))
             .dataIsEmpty((data) -> ((JsonObject) data).size() == 0)
-            .build(), LOGGER, new File("regioncore_trivial").getAbsoluteFile());
+            .build(), LOGGER_TRIVIAL, new File("regioncore_trivial").getAbsoluteFile());
+
+    static {
+        Runtime.getRuntime().addShutdownHook(new RegionCoreTrivialAutoSaver());
+    }
 
     @Override
     public void onEnable() {
         super.onEnable();
+        saveDefaultConfig();
         Bukkit.getPluginManager().registerEvents(new EventListener(), this);
+        int time = getConfig().getInt("trivial_auto_save_period", 60000);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new RegionCoreTrivialAutoSaver(), time, time);
     }
 
     public static class EventListener implements Listener {

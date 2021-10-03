@@ -2,6 +2,6 @@ name: RegionCore
 main: top.yertinmc.regioncore.bukkit.RegionCore
 api-version: 1.13
 version: ${version}
-author: BlockStory
+author: YertinMC
 softdepend:
   - LibSlf4jCompat
