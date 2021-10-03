@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '7.0.0' apply false
+}
+
+allprojects {
+
+    group 'top.yertinmc.regioncore'
+    version '1.0-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+    }
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+}
+
+dependencies {
+    implementation 'org.jetbrains:annotations:22.0.0'
+    implementation 'org.slf4j:slf4j-api:2.0.0-alpha5'
+}
+
+tasks.build.dependsOn tasks.javadoc
+
+javadoc {
+    //noinspection GroovyAssignabilityCheck
+    options {
+        quiet()
+    }
+}
