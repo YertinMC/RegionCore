@@ -118,7 +118,7 @@ public class RegionCore extends JavaPlugin {
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        public void onEntityChangedBlock(EntityChangeBlockEvent event) {
+        public void onEntityChangeBlock(EntityChangeBlockEvent event) {
             onBlockRemove(event.getBlock());
         }
 

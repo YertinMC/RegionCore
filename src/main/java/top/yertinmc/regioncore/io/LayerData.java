@@ -99,7 +99,7 @@ public class LayerData {
      * @param data The data
      */
     public void setBlock(int x, int z, Object data) {
-        if (getChunk().getRegion().getManager().getManager().getDefinition().dataIsEmpty.apply(data))
+        if (data != null && getChunk().getRegion().getManager().getManager().getDefinition().dataIsEmpty.apply(data))
             data = null;
         this.data[getIndex(x, z)] = data;
     }

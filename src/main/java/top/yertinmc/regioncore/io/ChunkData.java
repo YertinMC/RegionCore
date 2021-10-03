@@ -90,7 +90,7 @@ public class ChunkData {
      *
      * @return The layer
      */
-    public LayerData getOrInitLayer(int y) {
+    public @NotNull LayerData getOrInitLayer(int y) {
         LayerData layer = getLayer(y);
         if (layer == null)
             layer = layers[y] = new LayerData(this);
