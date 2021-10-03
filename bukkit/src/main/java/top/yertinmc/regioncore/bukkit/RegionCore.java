@@ -5,7 +5,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,9 +40,17 @@ public class RegionCore extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new EventListener(), this);
     }
 
-    public class EventListener implements Listener {
+    public static class EventListener implements Listener {
 
+        @EventHandler
+        public void onChunkLoad(ChunkLoadEvent event) {
+            TRIVIAL.loadChunk(event.getWorld(), event.getChunk().getX(), event.getChunk().getZ());
+        }
 
+        @EventHandler
+        public void onChunkUnload(ChunkUnloadEvent event) {
+            TRIVIAL.unloadChunk(event.getWorld(), event.getChunk().getX(), event.getChunk().getZ());
+        }
 
     }
 
