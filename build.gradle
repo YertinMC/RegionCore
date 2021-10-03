@@ -19,22 +19,6 @@ allprojects {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-}
-
-dependencies {
-    implementation 'org.jetbrains:annotations:22.0.0'
-    implementation 'org.slf4j:slf4j-api:2.0.0-alpha5'
-}
-
-tasks.build.dependsOn tasks.javadoc
-
-javadoc {
-    options {
-        quiet()
-    }
-}
-
-allprojects {
     task javadocJar(type: Jar) {
         classifier 'javadoc'
         from javadoc
@@ -43,6 +27,21 @@ allprojects {
     task sourcesJar(type: Jar) {
         classifier 'sources'
         from sourceSets.main.allSource
+    }
+
+}
+
+dependencies {
+    implementation 'org.jetbrains:annotations:22.0.0'
+    implementation 'org.slf4j:slf4j-api:2.0.0-alpha5'
+}
+
+tasks.build.dependsOn tasks.javadocJar
+tasks.build.dependsOn tasks.sourcesJar
+
+javadoc {
+    options {
+        quiet()
     }
 }
 
