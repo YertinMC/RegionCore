@@ -10,4 +10,4 @@ A world is built with lots of chunks and some chunks can be a region.
 
 A chunk a is made with some layers and a layer is made with some "block" data.
 
-Read [Wiki](https://github.com/YertinMC/RegionCore/wiki) for more.
+Read [Wiki](https://github.com/YertinMC/RegionCore/wiki)  or [Javadoc](https://javadoc.jitpack.io/top/yertinmc/RegionCore/RegionCore/latest/javadoc/) for more.
