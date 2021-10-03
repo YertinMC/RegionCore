@@ -3,7 +3,9 @@ package top.yertinmc.regioncore.bukkit;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,5 +30,17 @@ public class RegionCore extends JavaPlugin {
             .dataDeserializer((data) -> GSON.fromJson(new String(data), JsonObject.class))
             .dataIsEmpty((data) -> ((JsonObject) data).size() == 0)
             .build(), LOGGER, new File("regioncore_trivial").getAbsoluteFile());
+
+    @Override
+    public void onEnable() {
+        super.onEnable();
+        Bukkit.getPluginManager().registerEvents(new EventListener(), this);
+    }
+
+    public class EventListener implements Listener {
+
+
+
+    }
 
 }

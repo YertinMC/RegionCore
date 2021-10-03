@@ -1,5 +1,7 @@
+//file:noinspection GroovyAssignabilityCheck
 plugins {
     id 'java'
+    id 'maven-publish'
     id 'com.github.johnrengelman.shadow'
 }
 
@@ -21,5 +23,15 @@ tasks.build.dependsOn tasks.shadowJar
 processResources {
     filesMatching('plugin.yml') {
         expand 'version': project.version
+    }
+}
+
+publishing {
+    publications {
+        main(MavenPublication) {
+            artifact jar
+            artifact shadowJar
+            artifact sourcesJar
+        }
     }
 }

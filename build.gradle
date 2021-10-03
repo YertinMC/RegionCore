@@ -1,3 +1,4 @@
+//file:noinspection GroovyAssignabilityCheck
 plugins {
     id 'java'
     id 'maven-publish'
@@ -28,8 +29,29 @@ dependencies {
 tasks.build.dependsOn tasks.javadoc
 
 javadoc {
-    //noinspection GroovyAssignabilityCheck
     options {
         quiet()
+    }
+}
+
+allprojects {
+    task javadocJar(type: Jar) {
+        classifier 'javadoc'
+        from javadoc
+    }
+
+    task sourcesJar(type: Jar) {
+        classifier 'sources'
+        from sourceSets.main.allSource
+    }
+}
+
+publishing {
+    publications {
+        main(MavenPublication) {
+            artifact jar
+            artifact javadocJar
+            artifact sourcesJar
+        }
     }
 }
