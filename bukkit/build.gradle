@@ -15,7 +15,7 @@ dependencies {
     implementation(rootProject) {
         exclude group: 'org.slf4j'
     }
-    compileOnly 'org.slf4j:slf4j-api:2.0.0-alpha5'
+    compileOnly 'org.slf4j:slf4j-api:2.0.0-alpha6'
 }
 
 tasks.build.dependsOn tasks.shadowJar
